@@ -12,9 +12,9 @@ pub struct User {
     pub email: String,
 }
 
-pub struct MyError;
+pub struct UserFormError;
 
-impl IntoResponse for MyError {
+impl IntoResponse for UserFormError {
     fn into_response(self) -> axum::response::Response {
         Response::builder()
             .status(StatusCode::BAD_REQUEST)
@@ -27,12 +27,12 @@ impl<S> FromRequest<S> for User
 where
     S: Send + Sync,
 {
-    type Rejection = MyError;
+    type Rejection = UserFormError;
 
     async fn from_request(req: Request, state: &S) -> Result<Self, Self::Rejection> {
         match axum::extract::Form::<User>::from_request(req, state).await {
             Ok(user) => Ok(user.0),
-            Err(_) => Err(MyError),
+            Err(_) => Err(UserFormError),
         }
     }
 }

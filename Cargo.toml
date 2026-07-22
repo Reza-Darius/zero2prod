@@ -10,10 +10,12 @@ axum-server = "0.8.0"
 reqwest = "0.13.4"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
+sqlx = { version = "0.9", features = [ "runtime-tokio", "tls-rustls-aws-lc-rs", "postgres" , "uuid"] }
 test-log = "0.2.21"
+testcontainers-modules = { version = "0.15.0", features = ["blocking", "postgres"] }
 tokio = { version = "1.52.3", features = ["full"] }
 tower = "0.5.3"
-tower-http = "0.7.0"
+tower-http = { version = "0.7.0", features = ["trace"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 

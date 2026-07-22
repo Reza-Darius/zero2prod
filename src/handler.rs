@@ -1,8 +1,8 @@
-use axum::{Form, extract::rejection::FormRejection, response::IntoResponse};
+use axum::response::IntoResponse;
 use reqwest::StatusCode;
-use tracing::{error, info};
+use tracing::info;
 
-use crate::models::{MyError, User};
+use crate::models::{UserFormError, User};
 
 pub async fn health_check() -> impl IntoResponse {
     info!("new health check");
@@ -10,14 +10,12 @@ pub async fn health_check() -> impl IntoResponse {
     "im alive!"
 }
 
-pub async fn subscribe(user: Result<User, MyError>) -> StatusCode {
+pub async fn subscribe(user: Result<User, UserFormError>) -> axum::response::Result<StatusCode> {
     match user {
         Ok(user) => {
             info!(name = user.name, email = user.email, "new subscriber");
-            StatusCode::OK
+            Ok(StatusCode::OK)
         }
-        Err(_) => {
-            StatusCode::BAD_REQUEST
-        },
+        Err(_) => Err(StatusCode::BAD_REQUEST.into()),
     }
 }
