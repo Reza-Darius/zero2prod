@@ -4,7 +4,9 @@ set -x
 # Exit the script immediately if any command returns a non-zero exit status.
 set -eo pipefail
 
-APP_NAME="newsletter"
+source .env
+
+APP_NAME="zero2prod"
 
 DB_USER="${POSTGRES_USER:=postgres}"
 DB_PASSWORD="${POSTGRES_PASSWORD:=password}"
