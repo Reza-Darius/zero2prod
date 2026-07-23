@@ -5,10 +5,11 @@ use axum::{
 };
 use reqwest::StatusCode;
 use serde::Deserialize;
+use sqlx::prelude::FromRow;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, FromRow)]
 pub struct User {
-    pub name: String,
+    pub user_name: String,
     pub email: String,
 }
 

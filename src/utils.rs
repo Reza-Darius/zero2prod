@@ -15,7 +15,6 @@ pub struct Config {
     db_url: String,
 }
 
-//DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
 pub fn load_config() -> Result<Config, anyhow::Error> {
     dotenvy::dotenv().with_context(|| "failed to find .env")?;
     let mut config: Config = envy::from_env().with_context(|| "failed to serialize config")?;

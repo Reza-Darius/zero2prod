@@ -21,6 +21,9 @@ tower-http = { version = "0.7.0", features = ["trace"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 
+[dev-dependencies]
+test-containers-util = { version = "0.1", features = ["pg-sqlx"], git = "https://github.com/Reza-Darius/test-containers-util.git", branch = "update/bump-to-sqlx-0.9.0" }
+
 [lib]
 path = "src/lib.rs"
 

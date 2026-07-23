@@ -6,3 +6,4 @@ mod database;
 mod utils;
 
 pub use server::run;
+pub use database::Database;

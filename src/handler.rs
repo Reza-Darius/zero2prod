@@ -13,7 +13,7 @@ pub async fn health_check() -> impl IntoResponse {
 pub async fn subscribe(user: Result<User, UserFormError>) -> axum::response::Result<StatusCode> {
     match user {
         Ok(user) => {
-            info!(name = user.name, email = user.email, "new subscriber");
+            info!(name = user.user_name, email = user.email, "new subscriber");
             Ok(StatusCode::OK)
         }
         Err(_) => Err(StatusCode::BAD_REQUEST.into()),
