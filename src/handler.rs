@@ -16,7 +16,7 @@ pub async fn health_check() -> impl IntoResponse {
 pub async fn new_sub(
     app: State<App>,
     user: Result<User, UserFormError>,
-) -> axum::response::Result<StatusCode> {
+) -> Result<StatusCode, StatusCode> {
     match user {
         Ok(user) => {
             info!(name = user.name, email = user.email, "new subscriber");
@@ -27,12 +27,12 @@ pub async fn new_sub(
                 .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
             Ok(StatusCode::OK)
         }
-        Err(_) => Err(StatusCode::BAD_REQUEST.into()),
+        Err(_) => Err(StatusCode::BAD_REQUEST),
     }
 }
 
 #[axum::debug_handler]
-pub async fn get_subs(app: State<App>) -> axum::response::Result<Json<Vec<User>>> {
+pub async fn get_subs(app: State<App>) -> Result<Json<Vec<User>>, StatusCode> {
     let users = app
         .db()
         .get_subs()

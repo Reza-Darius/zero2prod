@@ -7,3 +7,4 @@ mod utils;
 
 pub use server::run;
 pub use database::Database;
+pub use models::*;

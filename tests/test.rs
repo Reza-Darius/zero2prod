@@ -2,12 +2,11 @@ mod common;
 
 use crate::common::setup::*;
 use test_log::test;
-
+use zero2prod::User;
 
 #[test(tokio::test)]
 async fn get_healthtest() {
-    let db = new_test_db().await;
-    let addr = start_server(db.get_db()).await.unwrap();
+    let (addr, _guard) = start_server().await.unwrap();
     let client = get_client();
     let url = format!("http://{}{}", addr, "/health");
     let res = client.get(url).send().await.unwrap();
@@ -16,11 +15,9 @@ async fn get_healthtest() {
     println!("res: {}", res.text_with_charset("utf-8").await.unwrap());
 }
 
-
 #[test(tokio::test)]
 async fn post_sub_ok() {
-    let db = new_test_db().await;
-    let addr = start_server(db.get_db()).await.unwrap();
+    let (addr, _guard) = start_server().await.unwrap();
     let client = get_client();
 
     let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
@@ -33,13 +30,23 @@ async fn post_sub_ok() {
         .expect("Failed to execute request.");
 
     assert!(res.status().is_success());
-}
 
+    let res: Vec<User> = client
+        .get(format!("http://{}{}", addr, "/subscriptions"))
+        .send()
+        .await
+        .expect("Failed to execute request.")
+        .json()
+        .await
+        .expect("failed to deserialize response to json");
+
+    assert_eq!(res[0].name, "le guin");
+    assert_eq!(res[0].email, "ursula_le_guin@gmail.com");
+}
 
 #[test(tokio::test)]
 async fn post_sub_err() {
-    let db = new_test_db().await;
-    let addr = start_server(db.get_db()).await.unwrap();
+    let (addr, _guard) = start_server().await.unwrap();
     let client = get_client();
 
     let test_cases = vec![
@@ -50,7 +57,7 @@ async fn post_sub_err() {
 
     for (invalid_body, error_message) in test_cases {
         let response = client
-        .post(format!("http://{}{}", addr, "/subscriptions"))
+            .post(format!("http://{}{}", addr, "/subscriptions"))
             .header("Content-Type", "application/x-www-form-urlencoded")
             .body(invalid_body)
             .send()
@@ -66,4 +73,3 @@ async fn post_sub_err() {
         );
     }
 }
-

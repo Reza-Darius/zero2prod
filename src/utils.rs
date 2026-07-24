@@ -10,23 +10,28 @@ pub struct Config {
     db_port: u16,
     db_host: String,
     app_name: String,
+}
 
-    #[serde(skip)]
-    db_url: String,
+impl Config {
+    pub fn db_url(&self) -> String {
+        format!(
+            "postgres://{}:{}@{}:{}/{}",
+            self.db_user,
+            self.db_password,
+            self.db_host,
+            self.db_port,
+            self.app_name
+        )
+    }
 }
 
 pub fn load_config() -> Result<Config, anyhow::Error> {
     dotenvy::dotenv().with_context(|| "failed to find .env")?;
-    let mut config: Config = envy::from_env().with_context(|| "failed to serialize config")?;
-    config.db_url = format!(
-        "postgres://{}:{}@{}:{}/{}",
-        config.db_user, config.db_password, config.db_host, config.db_port, config.app_name
-    );
-    Ok(config)
+    envy::from_env().with_context(|| "failed to serialize config")
 }
 
 #[test]
 fn config_load_test() {
     let config = load_config().unwrap();
-    println!("{}", config.db_url);
+    println!("{}", config.db_url());
 }
