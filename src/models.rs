@@ -4,12 +4,12 @@ use axum::{
     response::IntoResponse,
 };
 use reqwest::StatusCode;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 
-#[derive(Debug, Deserialize, FromRow)]
+#[derive(Debug, Deserialize, FromRow, Serialize)]
 pub struct User {
-    pub user_name: String,
+    pub name: String,
     pub email: String,
 }
 

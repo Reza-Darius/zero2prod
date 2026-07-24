@@ -7,7 +7,7 @@ use tracing::info;
 use crate::{database::Database, routes::routes};
 
 #[derive(Clone)]
-pub struct AppState {
+pub struct App {
     inner: Arc<AppInner>,
 }
 
@@ -15,16 +15,20 @@ struct AppInner {
     db: Database,
 }
 
-impl AppState {
+impl App {
     fn new(db: Database) -> Self {
-        AppState {
+        App {
             inner: Arc::new(AppInner { db }),
         }
+    }
+
+    pub fn db(&self) -> &Database {
+        &self.inner.db
     }
 }
 
 pub async fn run(listener: TcpListener, db: Database) -> io::Result<()> {
-    let app = AppState::new(db);
+    let app = App::new(db);
     let routes = routes(app);
 
     info!("listening on {}", listener.local_addr()?);

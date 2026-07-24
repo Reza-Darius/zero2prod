@@ -6,7 +6,8 @@ use test_log::test;
 
 #[test(tokio::test)]
 async fn get_healthtest() {
-    let addr = start_server().await.unwrap();
+    let db = new_test_db().await;
+    let addr = start_server(db.get_db()).await.unwrap();
     let client = get_client();
     let url = format!("http://{}{}", addr, "/health");
     let res = client.get(url).send().await.unwrap();
@@ -18,7 +19,8 @@ async fn get_healthtest() {
 
 #[test(tokio::test)]
 async fn post_sub_ok() {
-    let addr = start_server().await.unwrap();
+    let db = new_test_db().await;
+    let addr = start_server(db.get_db()).await.unwrap();
     let client = get_client();
 
     let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
@@ -36,7 +38,8 @@ async fn post_sub_ok() {
 
 #[test(tokio::test)]
 async fn post_sub_err() {
-    let addr = start_server().await.unwrap();
+    let db = new_test_db().await;
+    let addr = start_server(db.get_db()).await.unwrap();
     let client = get_client();
 
     let test_cases = vec![

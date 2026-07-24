@@ -28,19 +28,19 @@ impl Database {
         Ok(Database { pool })
     }
 
-    pub async fn new_sub(&self, user_name: &str, email: &str) -> Result<()> {
-        sqlx::query("INSERT INTO subscriptions VALUES(?, ?)")
-            .bind(user_name)
+    pub async fn new_sub(&self, name: &str, email: &str) -> Result<()> {
+        sqlx::query("INSERT INTO subscriptions(name, email) VALUES($1, $2);")
+            .bind(name)
             .bind(email)
             .execute(&self.pool)
             .await?;
 
-        debug!(user_name, email, "added new sub");
+        debug!(name, email, "added new sub");
         Ok(())
     }
 
     pub async fn get_subs(&self) -> Result<Vec<User>> {
-        let res = sqlx::query_as::<_, User>("SELECT * FROM subscriptions")
+        let res = sqlx::query_as::<_, User>("SELECT * FROM subscriptions;")
             .fetch_all(&self.pool)
             .await?;
 
