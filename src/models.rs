@@ -6,11 +6,14 @@ use axum::{
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
+use time::OffsetDateTime;
 
-#[derive(Debug, Deserialize, FromRow, Serialize)]
+#[derive(Debug, FromRow, Deserialize, Serialize)]
 pub struct User {
     pub name: String,
     pub email: String,
+
+    pub subscribed_at: Option<OffsetDateTime>,
 }
 
 pub struct UserFormError;

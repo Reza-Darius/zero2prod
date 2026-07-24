@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     name TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL,
 
-    subscribed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    subscribed_at TIMESTAMPTZ NOT NULL
 );

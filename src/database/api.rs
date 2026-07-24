@@ -1,6 +1,7 @@
 use anyhow::Context;
 use anyhow::Result;
 use sqlx::{PgPool, Pool, Postgres, migrate::Migrator, postgres::PgPoolOptions};
+use time::OffsetDateTime;
 use tracing::debug;
 
 use crate::models::User;
@@ -29,9 +30,10 @@ impl Database {
     }
 
     pub async fn new_sub(&self, name: &str, email: &str) -> Result<()> {
-        sqlx::query("INSERT INTO subscriptions(name, email) VALUES($1, $2);")
+        sqlx::query("INSERT INTO subscriptions(name, email, subscribed_at) VALUES($1, $2, $3);")
             .bind(name)
             .bind(email)
+            .bind(OffsetDateTime::now_utc())
             .execute(&self.pool)
             .await?;
 

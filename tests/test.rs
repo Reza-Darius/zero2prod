@@ -42,6 +42,7 @@ async fn post_sub_ok() {
 
     assert_eq!(res[0].name, "le guin");
     assert_eq!(res[0].email, "ursula_le_guin@gmail.com");
+    println!("response: {:#?}", res[0]);
 }
 
 #[test(tokio::test)]
