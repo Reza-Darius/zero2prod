@@ -5,10 +5,9 @@ use axum::{
 };
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
-use sqlx::prelude::FromRow;
 use time::OffsetDateTime;
 
-#[derive(Debug, FromRow, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct User {
     pub name: String,
     pub email: String,

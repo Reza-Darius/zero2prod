@@ -6,18 +6,17 @@ set -eo pipefail
 
 source .env
 
-APP_NAME="zero2prod"
-
+CONTAINER_NAME="zero2prod"
 DB_USER="${POSTGRES_USER:=postgres}"
 DB_PASSWORD="${POSTGRES_PASSWORD:=password}"
-DB_NAME="${APP_NAME}"
+DB_NAME="${DB_NAME:=database}"
 DB_PORT="${POSTGRES_PORT:=5432}"
 DB_HOST="${POSTGRES_HOST:=localhost}"
 
 # Capture the container ID so we can exec into it later
 CONTAINER_ID=$(docker run \
   --tmpfs /var/lib/postgresql \
-  --name "${APP_NAME}" \
+  --name "${CONTAINER_NAME}" \
   -e POSTGRES_USER="${DB_USER}" \
   -e POSTGRES_PASSWORD="${DB_PASSWORD}" \
   -e POSTGRES_DB="${DB_NAME}" \

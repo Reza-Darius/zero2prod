@@ -30,10 +30,7 @@ impl Database {
     }
 
     pub async fn new_sub(&self, name: &str, email: &str) -> Result<()> {
-        sqlx::query("INSERT INTO subscriptions(name, email, subscribed_at) VALUES($1, $2, $3);")
-            .bind(name)
-            .bind(email)
-            .bind(OffsetDateTime::now_utc())
+        sqlx::query!("INSERT INTO subscriptions(name, email, subscribed_at) VALUES($1, $2, $3);", name, email, OffsetDateTime::now_utc())
             .execute(&self.pool)
             .await?;
 
@@ -42,7 +39,7 @@ impl Database {
     }
 
     pub async fn get_subs(&self) -> Result<Vec<User>> {
-        let res = sqlx::query_as::<_, User>("SELECT * FROM subscriptions;")
+        let res = sqlx::query_as!(User, "SELECT name, email, subscribed_at FROM subscriptions;")
             .fetch_all(&self.pool)
             .await?;
 

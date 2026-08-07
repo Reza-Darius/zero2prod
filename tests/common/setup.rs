@@ -33,7 +33,7 @@ impl TestDbGuard {
 
 pub async fn new_test_db() -> TestDbGuard {
     TestDbGuard {
-        guard: PostgresTestDb::create("zero2prod-test", &MIGRATOR, None, None).await,
+        guard: PostgresTestDb::create("zero2prod-integration-test", &MIGRATOR, None, None).await,
     }
 }
 

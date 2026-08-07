@@ -8,3 +8,4 @@ mod utils;
 pub use server::run;
 pub use database::Database;
 pub use models::*;
+pub use utils::{load_config, Config};

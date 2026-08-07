@@ -9,7 +9,7 @@ pub struct Config {
     db_password: String,
     db_port: u16,
     db_host: String,
-    app_name: String,
+    db_name: String,
 }
 
 impl Config {
@@ -20,7 +20,7 @@ impl Config {
             self.db_password,
             self.db_host,
             self.db_port,
-            self.app_name
+            self.db_name
         )
     }
 }
